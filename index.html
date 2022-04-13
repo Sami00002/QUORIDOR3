@@ -7,19 +7,33 @@
     <title>Document</title>
 </head>
 <body>
-    <script src ="p5.min.js"></script>  
+    <script src ="p5.min.js"></script>
     <script>
 
-var widthCanvas = 700;
+var widthCanvas = 950;
 var heightCanvas = 710;
 let board, w;
 const cols = 19, rows = 19;
 const pawn1 = 2;
 const pawn2 = 3;
 var round = false;
-let name = true;
+var names = true;
+var playOn = false;
+var letsPlay = false;
+var player1;
+var player2;
+let play;
+let img;
+let img2;
+let nothing = "";
 
+// preload images
+function preload() {
+  img = loadImage('background.jpg');
+  img2 = loadImage('background2.jpg');
+}
 
+// make array for board
 function makeBoard(cols, rows) {
 	let array = new Array(cols);
 	for (let i = 0;i < array.length;i++) {
@@ -28,60 +42,99 @@ function makeBoard(cols, rows) {
 	return array;
 }
 
-function setup() {
-    if(name == true){
+//making buttons
+function buttons(){
     PlayButton = createButton("Down")
-    PlayButton.position(790,130)
+    PlayButton.position(widthCanvas- 150,heightCanvas -555)
     PlayButton.mousePressed(moveDownPawn1);
     PlayButton = createButton("Right  ")
-    PlayButton.position(850,90)
+    PlayButton.position(widthCanvas - 90,heightCanvas-600)
     PlayButton.mousePressed(moveRightPawn1);
     PlayButton = createButton("Left  ")
-    PlayButton.position(730,90)
+    PlayButton.position(widthCanvas-205,heightCanvas-600)
     PlayButton.mousePressed(moveLeftPawn1);
     PlayButton = createButton("Up     ")
-    PlayButton.position(790,50)
+    PlayButton.position(widthCanvas-145,heightCanvas - 640)
     PlayButton.mousePressed(moveUpPawn1);
 
     PlayButton = createButton("Down")
-    PlayButton.position(790,650)
+    PlayButton.position(widthCanvas- 150,heightCanvas-60)
     PlayButton.mousePressed(moveDownPawn2);
     PlayButton = createButton("Right  ")
-    PlayButton.position(850,610)
+    PlayButton.position(widthCanvas - 90,heightCanvas-100)
     PlayButton.mousePressed(moveRightPawn2);
     PlayButton = createButton("Left  ")
-    PlayButton.position(730,610)
+    PlayButton.position(widthCanvas-205,heightCanvas-100)
     PlayButton.mousePressed(moveLeftPawn2);
     PlayButton = createButton("Up     ")
-    PlayButton.position(790,570)
+    PlayButton.position(widthCanvas-145,heightCanvas-140)
     PlayButton.mousePressed(moveUpPawn2);
 
     PlayButton = createButton("Reset map")
-    PlayButton.position(790,350)
+    PlayButton.position(widthCanvas - 170,heightCanvas-360)
     PlayButton.mousePressed(setup);
+}
+
+function setup() {
+ //create buttons for home page  
+    if(names == true){
+
+    player1 = createInput("");
+     player1.position(widthCanvas/4,250);
+     player1.size(100);
+     player2 = createInput("");
+     player2.position(widthCanvas/1.7,250);
+     player2.size(100);
+     play = createButton("Let's play")
+     play.position(widthCanvas/2.25,190)
+     if(player1.value() == 0 || player2.value() == 0)
+     letsPlay = true;
+     console.log(letsPlay);
+     if(letsPlay)
+        play.mousePressed(home);
+  
+    
     }
+    
+    
 
 	createCanvas(widthCanvas, heightCanvas);
-	w = floor(width / cols);
+	//calculating the dimensions of squares fo cubes of equal size
+    w = floor((width - (width/4)) / cols);
 	board = makeBoard(cols, rows);
-	for (let i = 0;i < cols;i++) {
+   
+    for (let i = 0;i < cols;i++) {
 		for (let j = 0;j < rows;j++) {
 			board[i][j] = new Cell(i, j, w, 1);
 		}
 	}
+    //putting pawns on the table
     board[1][9].change(1,9,w,pawn1);
     board[17][9].change(17,9,w,pawn2);
     console.log(board);
 }
+//removing buttons and inputs, changing background and 
+  function home(){
+  img = img2;
+  player1.remove();
+  player2.remove();
+  play.remove();
+  buttons();
+  names = false;
+  playOn = true;
+
+  
+//     name = true;
+  }
 
 function moveDownPawn1() {
     if(round){
     var flag = false;
     for (let i = 0;i < cols;i++) {
 		for (let j = 0;j < rows;j++) {
-            if(board[i][j].v == pawn1){
+            if(board[i][j].v == pawn1  && i+2 < 19){
             board[i][j].change(i,j,w,1);
-            board[i+2][j].change(i+2,j,w,pawn1); 
+            board[i+2][j].change(i+2,j,w,pawn1);
             flag = true;
             round = false;
             }
@@ -96,11 +149,11 @@ function moveLeftPawn1() {
     var flag = false;
     for (let i = 0;i < cols;i++) {
 		for (let j = 0;j < rows;j++) {
-            if(board[i][j].v == pawn1){
+            if(board[i][j].v == pawn1 && j-2 > 0){
             board[i][j].change(i,j,w,1);
-            board[i][j-2].change(i,j-2,w,pawn1); 
+            board[i][j-2].change(i,j-2,w,pawn1);
             flag = true;
-            round = false;  
+            round = false;
             }
             if(flag == true)
             break;
@@ -113,11 +166,11 @@ function moveRightPawn1() {
     var flag = false;
     for (let i = 0;i < cols;i++) {
 		for (let j = 0;j < rows;j++) {
-            if(board[i][j].v == pawn1){
+            if(board[i][j].v == pawn1 && j+2 <19){
             board[i][j].change(i,j,w,1);
-            board[i][j+2].change(i,j+2,w,pawn1); 
-            flag = true; 
-            round = false; 
+            board[i][j+2].change(i,j+2,w,pawn1);
+            flag = true;
+            round = false;
             }
             if(flag == true)
             break;
@@ -130,11 +183,11 @@ function moveUpPawn1() {
     var flag = false;
 for (let i = 0;i < cols;i++) {
 		for (let j = 0;j < rows;j++) {
-            if(board[i][j].v == pawn1){
+            if(board[i][j].v == pawn1 && i-2 > 0){
             board[i][j].change(i,j,w,1);
-            board[i-2][j].change(i-2,j,w,pawn1); 
-            flag = true; 
-            round = false; 
+            board[i-2][j].change(i-2,j,w,pawn1);
+            flag = true;
+            round = false;
             }
             if(flag == true)
             break;
@@ -146,13 +199,13 @@ for (let i = 0;i < cols;i++) {
 function moveDownPawn2() {
     if(!round){
     var flag = false;
-    for (let i = 0;i < cols;i++) {   
+    for (let i = 0;i < cols;i++) {
 		for (let j = 0;j < rows;j++) {
-            if(board[i][j].v == pawn2){
+            if(board[i][j].v == pawn2 && i+2 < 19){
             board[i][j].change(i,j,w,1);
-            board[i+2][j].change(i+2,j,w,pawn2); 
+            board[i+2][j].change(i+2,j,w,pawn2);
             flag = true;
-            round = true;  
+            round = true;
             }
             if(flag == true)
             break;
@@ -166,11 +219,11 @@ function moveUpPawn2() {
     var flag = false;
 for (let i = 0;i < cols;i++) {
 		for (let j = 0;j < rows;j++) {
-            if(board[i][j].v == pawn2){
+            if(board[i][j].v == pawn2 && i-2 > 0){
             board[i][j].change(i,j,w,1);
-            board[i-2][j].change(i-2,j,w,pawn2); 
+            board[i-2][j].change(i-2,j,w,pawn2);
             flag = true;
-            round = true;  
+            round = true;
             }
             if(flag == true)
             break;
@@ -184,11 +237,11 @@ function moveLeftPawn2() {
     var flag = false;
     for (let i = 0;i < cols;i++) {
 		for (let j = 0;j < rows;j++) {
-            if(board[i][j].v == pawn2){
+            if(board[i][j].v == pawn2 && j-2 > 0){
             board[i][j].change(i,j,w,1);
-            board[i][j-2].change(i,j-2,w,pawn2); 
-            flag = true; 
-            round = true; 
+            board[i][j-2].change(i,j-2,w,pawn2);
+            flag = true;
+            round = true;
             }
             if(flag == true)
             break;
@@ -202,10 +255,10 @@ function moveRightPawn2() {
     var flag = false;
     for (let i = 0;i < cols;i++) {
 		for (let j = 0;j < rows;j++) {
-            if(board[i][j].v == pawn2){
+            if(board[i][j].v == pawn2 && j+2 < 19){
             board[i][j].change(i,j,w,1);
-            board[i][j+2].change(i,j+2,w,pawn2); 
-            flag = true;  
+            board[i][j+2].change(i,j+2,w,pawn2);
+            flag = true;
             round = true;
             }
             if(flag == true)
@@ -215,15 +268,27 @@ function moveRightPawn2() {
 }else alert("It's not your round");
 }
 
+
 function draw() {
-	background("RED");
+    if(text){
+        fill("white")
+    background(img);
+    text("Player 1: " , 240, 300)
+        textSize(25)
+    }
+//if playOn is true, afiseaza numele si drawing board 
+if(playOn){
+    text(player1.value(),770, 40);
+    text(player2.value(),770, 550);
+    textSize(25);
 	for (let j = 0;j < cols;j++) {
 		for (let i = 0;i < rows;i++) {
 			board[i][j].draw();
             }
 		}
     }
-
+}
+//adding class Cell
 class Cell {
     constructor(i, j, w, v = 1){
         this.i = i;
@@ -233,10 +298,11 @@ class Cell {
 	    this.w = w;
         this.v = v;
     }
+    //drawing cubes(the white cubes on the table)
     draw(){
         if (this.i % 2 == 1 && this.j % 2 == 1) {
         rect(this.x,this.y, this.w+15, this.w+15);
-        text(this.v, this.x, this.y+15);
+       // text(this.v, this.x, this.y+15);
         }
         if(this.v!=1){
             if(this.v == pawn1){
@@ -248,10 +314,11 @@ class Cell {
             circle(this.x+25,this.y+25,w);
             }
             fill("WHITE")
-            
+
         }
-        
+
     }
+    //parameters for changing pawn location
     change(i, j, w, v){
         this.i = i;
 	    this.j = j;
