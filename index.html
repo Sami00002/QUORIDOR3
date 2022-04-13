@@ -8,6 +8,7 @@
 </head>
 <body>
     <script src ="p5.min.js"></script>
+    <script src ="./movePawns.js"></script>
     <script>
 
 var widthCanvas = 950;
@@ -19,13 +20,14 @@ const pawn2 = 3;
 var round = false;
 var names = true;
 var playOn = false;
-var letsPlay = false;
+var letsPlay = true;
 var player1;
 var player2;
 let play;
 let img;
 let img2;
 let nothing = "";
+var t;
 
 // preload images
 function preload() {
@@ -87,7 +89,7 @@ function setup() {
      player2.size(100);
      play = createButton("Let's play")
      play.position(widthCanvas/2.25,190)
-     if(player1.value() == 0 || player2.value() == 0)
+     if(player1.value() != 0 || player2.value() != 0)
      letsPlay = true;
      console.log(letsPlay);
      if(letsPlay)
@@ -273,7 +275,7 @@ function draw() {
     if(text){
         fill("white")
     background(img);
-    text("Player 1: " , 240, 300)
+     text("Player 1: " , 240, 300)
         textSize(25)
     }
 //if playOn is true, afiseaza numele si drawing board 
