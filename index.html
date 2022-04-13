@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src ="p5.min.js"></script>  
+    <script>
+
+var widthCanvas = 700;
+var heightCanvas = 710;
+let board, w;
+const cols = 19, rows = 19;
+const pawn1 = 2;
+const pawn2 = 3;
+var round = false;
+let name = true;
+
+
+function makeBoard(cols, rows) {
+	let array = new Array(cols);
+	for (let i = 0;i < array.length;i++) {
+		array[i] = new Array(rows);
+	}
+	return array;
+}
+
+function setup() {
+    if(name == true){
+    PlayButton = createButton("Down")
+    PlayButton.position(790,130)
+    PlayButton.mousePressed(moveDownPawn1);
+    PlayButton = createButton("Right  ")
+    PlayButton.position(850,90)
+    PlayButton.mousePressed(moveRightPawn1);
+    PlayButton = createButton("Left  ")
+    PlayButton.position(730,90)
+    PlayButton.mousePressed(moveLeftPawn1);
+    PlayButton = createButton("Up     ")
+    PlayButton.position(790,50)
+    PlayButton.mousePressed(moveUpPawn1);
+
+    PlayButton = createButton("Down")
+    PlayButton.position(790,650)
+    PlayButton.mousePressed(moveDownPawn2);
+    PlayButton = createButton("Right  ")
+    PlayButton.position(850,610)
+    PlayButton.mousePressed(moveRightPawn2);
+    PlayButton = createButton("Left  ")
+    PlayButton.position(730,610)
+    PlayButton.mousePressed(moveLeftPawn2);
+    PlayButton = createButton("Up     ")
+    PlayButton.position(790,570)
+    PlayButton.mousePressed(moveUpPawn2);
+
+    PlayButton = createButton("Reset map")
+    PlayButton.position(790,350)
+    PlayButton.mousePressed(setup);
+    }
+
+	createCanvas(widthCanvas, heightCanvas);
+	w = floor(width / cols);
+	board = makeBoard(cols, rows);
+	for (let i = 0;i < cols;i++) {
+		for (let j = 0;j < rows;j++) {
+			board[i][j] = new Cell(i, j, w, 1);
+		}
+	}
+    board[1][9].change(1,9,w,pawn1);
+    board[17][9].change(17,9,w,pawn2);
+    console.log(board);
+}
+
+function moveDownPawn1() {
+    if(round){
+    var flag = false;
+    for (let i = 0;i < cols;i++) {
+		for (let j = 0;j < rows;j++) {
+            if(board[i][j].v == pawn1){
+            board[i][j].change(i,j,w,1);
+            board[i+2][j].change(i+2,j,w,pawn1); 
+            flag = true;
+            round = false;
+            }
+            if(flag == true)
+            break;
+        }
+    }
+} else alert("It's not your round");
+}
+function moveLeftPawn1() {
+    if(round){
+    var flag = false;
+    for (let i = 0;i < cols;i++) {
+		for (let j = 0;j < rows;j++) {
+            if(board[i][j].v == pawn1){
+            board[i][j].change(i,j,w,1);
+            board[i][j-2].change(i,j-2,w,pawn1); 
+            flag = true;
+            round = false;  
+            }
+            if(flag == true)
+            break;
+        }
+    }
+}else alert("It's not your round");
+}
+function moveRightPawn1() {
+    if(round){
+    var flag = false;
+    for (let i = 0;i < cols;i++) {
+		for (let j = 0;j < rows;j++) {
+            if(board[i][j].v == pawn1){
+            board[i][j].change(i,j,w,1);
+            board[i][j+2].change(i,j+2,w,pawn1); 
+            flag = true; 
+            round = false; 
+            }
+            if(flag == true)
+            break;
+        }
+    }
+}else alert("It's not your round");
+}
+function moveUpPawn1() {
+    if(round){
+    var flag = false;
+for (let i = 0;i < cols;i++) {
+		for (let j = 0;j < rows;j++) {
+            if(board[i][j].v == pawn1){
+            board[i][j].change(i,j,w,1);
+            board[i-2][j].change(i-2,j,w,pawn1); 
+            flag = true; 
+            round = false; 
+            }
+            if(flag == true)
+            break;
+        }
+    }
+}else alert("It's not your round");
+}
+
+function moveDownPawn2() {
+    if(!round){
+    var flag = false;
+    for (let i = 0;i < cols;i++) {   
+		for (let j = 0;j < rows;j++) {
+            if(board[i][j].v == pawn2){
+            board[i][j].change(i,j,w,1);
+            board[i+2][j].change(i+2,j,w,pawn2); 
+            flag = true;
+            round = true;  
+            }
+            if(flag == true)
+            break;
+        }
+    }
+}else alert("It's not your round");
+}
+
+function moveUpPawn2() {
+    if(!round){
+    var flag = false;
+for (let i = 0;i < cols;i++) {
+		for (let j = 0;j < rows;j++) {
+            if(board[i][j].v == pawn2){
+            board[i][j].change(i,j,w,1);
+            board[i-2][j].change(i-2,j,w,pawn2); 
+            flag = true;
+            round = true;  
+            }
+            if(flag == true)
+            break;
+        }
+    }
+}else alert("It's not your round");
+}
+
+function moveLeftPawn2() {
+    if(!round){
+    var flag = false;
+    for (let i = 0;i < cols;i++) {
+		for (let j = 0;j < rows;j++) {
+            if(board[i][j].v == pawn2){
+            board[i][j].change(i,j,w,1);
+            board[i][j-2].change(i,j-2,w,pawn2); 
+            flag = true; 
+            round = true; 
+            }
+            if(flag == true)
+            break;
+        }
+    }
+}else alert("It's not your round");
+}
+
+function moveRightPawn2() {
+    if(!round){
+    var flag = false;
+    for (let i = 0;i < cols;i++) {
+		for (let j = 0;j < rows;j++) {
+            if(board[i][j].v == pawn2){
+            board[i][j].change(i,j,w,1);
+            board[i][j+2].change(i,j+2,w,pawn2); 
+            flag = true;  
+            round = true;
+            }
+            if(flag == true)
+            break;
+        }
+    }
+}else alert("It's not your round");
+}
+
+function draw() {
+	background("RED");
+	for (let j = 0;j < cols;j++) {
+		for (let i = 0;i < rows;i++) {
+			board[i][j].draw();
+            }
+		}
+    }
+
+class Cell {
+    constructor(i, j, w, v = 1){
+        this.i = i;
+	    this.j = j;
+	    this.x = j * w;
+	    this.y = i * w;
+	    this.w = w;
+        this.v = v;
+    }
+    draw(){
+        if (this.i % 2 == 1 && this.j % 2 == 1) {
+        rect(this.x,this.y, this.w+15, this.w+15);
+        text(this.v, this.x, this.y+15);
+        }
+        if(this.v!=1){
+            if(this.v == pawn1){
+            fill("BLUE")
+            circle(this.x+25,this.y+25,w);
+            }
+            if(this.v == pawn2){
+            fill("Red")
+            circle(this.x+25,this.y+25,w);
+            }
+            fill("WHITE")
+            
+        }
+        
+    }
+    change(i, j, w, v){
+        this.i = i;
+	    this.j = j;
+	    this.x = j * w;
+	    this.y = i * w;
+	    this.w = w;
+        this.v = v;
+    }
+}
+
+    </script>
+</body>
+</html>
